@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react'
-import { marked } from 'marked'
 
+// Убедитесь, что эта переменная окружения точно совпадает с той, что вы добавили в Vercel
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
 export const Context = createContext()
@@ -14,13 +14,12 @@ const ContextProvider = (props) => {
   const [resultData, setResultData] = useState('')
 
   const delayTyping = (index, nextChar, fullResponse) => {
-    // Изменили на символы
     setTimeout(() => {
       setResultData((prev) => prev + nextChar)
       if (index === fullResponse.length - 1) {
         setLoading(false)
       }
-    }, 10 * index) // Очень маленькая задержка на символ
+    }, 10 * index)
   }
 
   const onSent = async (prompt) => {
@@ -29,6 +28,7 @@ const ContextProvider = (props) => {
     setResultData('')
     setRecentPrompt(prompt)
 
+    // Добавляем новый запрос в историю
     const updatedHistory = [
       ...prevPrompts,
       {
@@ -39,13 +39,13 @@ const ContextProvider = (props) => {
     setPrevPrompts(updatedHistory)
 
     try {
+      // ИЗМЕНЁННЫЙ URL ДЛЯ ПРЯМОГО ЗАПРОСА НА VERVEL
       const response = await fetch(
-        `/gemini/v1beta/models/gemini-2.0-flash:generateContent`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-goog-api-key': API_KEY,
           },
           body: JSON.stringify({
             contents: updatedHistory,
@@ -66,12 +66,14 @@ const ContextProvider = (props) => {
         throw new Error('API returned an empty response.')
       }
 
-      // ПРЕОБРАЗУЕМ MARKDOWN В HTML
-      const htmlText = marked.parse(text)
+      const geminiResponse = {
+        role: 'model',
+        parts: [{ text: text }],
+      }
+      setPrevPrompts((prev) => [...prev, geminiResponse])
 
-      // Теперь выводим по символам, а не по словам
-      for (let i = 0; i < htmlText.length; i++) {
-        delayTyping(i, htmlText[i], htmlText)
+      for (let i = 0; i < text.length; i++) {
+        delayTyping(i, text[i], text)
       }
     } catch (error) {
       console.error('Ошибка:', error)
