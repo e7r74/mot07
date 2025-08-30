@@ -54,7 +54,7 @@ const Sidebar = () => {
       </div>
       <div className="bottom">
         <div className="bottom-item recent-entry">
-          <a href="tg://resolve?domain=Joldassov">
+          <a href="https://t.me/Joldassov">
             <img src={assets.question2} alt="" />
             {extended ? <p>Help</p> : null}
           </a>
