@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.VITE_GEMINI_API_KEY || '/mot07',
+  // base: process.env.VITE_GEMINI_API_KEY || '/mot07',
   server: {
     proxy: {
       '/gemini': {
