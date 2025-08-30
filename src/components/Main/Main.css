@@ -118,3 +118,65 @@
 .result-title p {
   color: #f0f4f9;
 }
+
+@media (max-width: 600px) {
+  .main {
+    min-height: 90vh;
+    padding-bottom: 20vh;
+  }
+
+  .main-container {
+    padding: 0 15px;
+  }
+
+  .main .nav {
+    font-size: 18px;
+    padding: 10px 15px;
+  }
+
+  .user_icon {
+    width: 35px;
+  }
+
+  .main .greet {
+    font-size: 32px;
+    margin: 30px 0;
+  }
+
+  .main-bottom {
+    padding-bottom: 20px;
+    left: 5px;
+    max-width: 100%;
+  }
+
+  .search-box {
+    margin: 10px 0;
+    padding: 8px 15px;
+    gap: 15px;
+  }
+
+  .search-box input {
+    font-size: 16px;
+    padding: 6px;
+  }
+
+  .search-box img {
+    width: 20px;
+  }
+  .search-box div {
+    position: static;
+  }
+
+  .result-data {
+    padding-bottom: 20px;
+  }
+
+  .result-title {
+    align-items: center;
+    gap: 10px;
+  }
+
+  .result-title p {
+    font-size: 14px;
+  }
+}
