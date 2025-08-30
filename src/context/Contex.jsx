@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react';
+import { marked } from 'marked';
 
-// Убедитесь, что эта переменная окружения точно совпадает с той, что вы добавили в Vercel
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 export const Context = createContext();
@@ -19,7 +19,7 @@ const ContextProvider = (props) => {
       if (index === fullResponse.length - 1) {
         setLoading(false);
       }
-    }, 10 * index); 
+    }, 10 * index);
   };
 
   const onSent = async (prompt) => {
@@ -28,7 +28,6 @@ const ContextProvider = (props) => {
     setResultData('');
     setRecentPrompt(prompt);
     
-    // Добавляем новый запрос в историю
     const updatedHistory = [
       ...prevPrompts,
       {
@@ -39,13 +38,14 @@ const ContextProvider = (props) => {
     setPrevPrompts(updatedHistory);
 
     try {
-      // ИЗМЕНЁННЫЙ URL ДЛЯ ПРЯМОГО ЗАПРОСА НА VERVEL
+      // ИЗМЕНЁННЫЙ URL ДЛЯ ПРЯМОГО ЗАПРОСА
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'X-goog-api-key': API_KEY, // Передаем ключ в заголовке
           },
           body: JSON.stringify({
             contents: updatedHistory,
@@ -72,8 +72,10 @@ const ContextProvider = (props) => {
       };
       setPrevPrompts(prev => [...prev, geminiResponse]);
 
-      for (let i = 0; i < text.length; i++) {
-        delayTyping(i, text[i], text);
+      const htmlText = marked.parse(text);
+      
+      for (let i = 0; i < htmlText.length; i++) {
+        delayTyping(i, htmlText[i], htmlText);
       }
       
     } catch (error) {
