@@ -127,6 +127,7 @@
 
   .main-container {
     padding: 0 15px;
+    margin-left: 10px;
   }
 
   .main .nav {
@@ -177,6 +178,11 @@
   }
 
   .result-title p {
-    font-size: 14px;
+    margin-left: 5px;
+    padding-left: 5px;
+    font-size: 16px;
+  }
+  .loader p {
+    padding-left: 10px;
   }
 }
